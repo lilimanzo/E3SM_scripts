@@ -1,0 +1,175 @@
+<html>
+<style>
+/* unvisited link */
+a:link {
+    text-decoration: none;
+    color: blue;
+}
+
+/* visited link */
+a:visited {
+    color: green;
+}
+
+/* mouse over link */
+a:hover {
+    color: hotpink;
+}
+
+/* selected link */
+a:active {
+    color: red;
+}
+
+td,th
+{border-left:1px solid black;
+ border-top:1px solid black;
+ text-align: left;
+ height: 35px}
+table
+{border-right:1px solid black;
+border-bottom:1px solid black;}
+
+.hitexta {font-size: 2.0em; color:DarkBlue}
+.hitext {font-size: 1.5em; color:DarkBlue}
+.hitextb {font-size: 1.5em; color:Black}
+.hitext0 {font-size: 1.0em; color:DarkBlue}
+.hitext2 {line-height: 1.8em; font-size: 1.5em;  color:DarkOrange}
+
+</style>
+<title>E3SM Tutorials Practice Scripts</title>
+<body leftmargin=30>
+
+<img src="../images/e3sm_template_banner1.png">
+<p>
+
+<table>
+<tr><th width=10>Type</th><th width=400>Run script</th><th width=750>Description</th></tr>
+<tr><td style='text-align: center;'> B</td><td><a href="run.v3.LR.historical_0101.pm-cpu.sh">run.v3.LR.historical_0101.pm-cpu.sh</a></td><td colspan=2>Historical simulation, hybrid start off year 0101 of piControl</td></tr>
+<tr><td style='text-align: center;'> B</td><td><a href="run.v3.LR.historical_0101_b2000.pm-cpu.sh">run.v3.LR.historical_0101_b2000.pm-cpu.sh</a></td><td colspan=2>Historical simulation, branch off year 2000 of an existing historial run</td></tr>
+<tr><td style='text-align: center;'> F</td><td><a href="run.v3.LR.amip_0101.pm-cpu.sh">run.v3.LR.amip_0101.pm-cpu.sh</a></td><td colspan=2>AMIP simulation, hybrid start off year 0101 of piControl</td></tr>
+<tr><td style='text-align: center;'> F</td> <td><a href="run.v3.LR.amip_0101_b2000.pm-cpu.sh">run.v3.LR.amip_0101_b2000.pm-cpu.sh</a></td> <td colspan=2>AMIP simulation, branch off year 2000 of an existing AMIP run</td> </tr>
+<tr><td style='text-align: center;'> F</td><td><a href="run.v3.LR.F2010.pm-cpu.sh">run.v3.LR.F2010.pm-cpu.sh</a></td><td colspan=2>Atmosphere F2010 (PD), hybrid start off year 2010 of an existing historical run</td></tr>
+<tr><td style='text-align: center;'> C</td><td><a href="run.v3.LR.CMPASO-IAF.pm-cpu.sh">run.v3.LR.CMPASO-IAF.pm-cpu.sh</a></td><td colspan=2>Ocean-only (C-case) forced by IAF (core-II forcing), hyrid start off year 0101 of piControl</td></tr>
+<tr><td style='text-align: center;'> D</td><td><a href="run.v3.LR.DTESTM-JRA1p5.pm-cpu.sh">run.v3.LR.DTESTM-JRA1p5.pm-cpu.sh</a></td><td colspan=2>Seaice-only (D-case) forced by JRA v1.5 forcing, hyrid start off year 0101 of piControl</td></tr>
+<tr><td style='text-align: center;'> G</td><td><a href="run.v3.LR.GMPAS-JRA1p5-DIB-DISMF.pm-cpu.sh">run.v3.LR.GMPAS-JRA1p5-DIB-DISMF.pm-cpu.sh</a></td><td colspan=2>Ocean and Ice only (G-case) with data iceberg and data ice shelf melt flux, forced by JRA v1.5, hybrid start off year 0101 of piControl</td></tr>
+<tr><td style='text-align: center;'> G</td><td><a href="run.v3.LR.GMPAS-JRA1p5.pm-cpu.sh">run.v3.LR.GMPAS-JRA1p5.pm-cpu.sh</a></td><td colspan=2>Ocean and Ice only (G-case), forced by JRA v1.5, hybrid start off year 0101 of piControl</td></tr>
+<tr><td style='text-align: center;'> I</td><td><a href="run.v3.LR.I20TR.pm-cpu.sh">run.v3.LR.I20TR.pm-cpu.sh</a></td><td colspan=2>Land-only (I-case), driven by transient GSWP3 (Global Soil Wetness Project Phase 3) forcings</td></tr>
+<tr><td style='text-align: center;'> C</td><td><a href="ocean_only_C_case">ocean_only_C_case</a></td><td colspan=2>More experiments with ocean-only C case </td></tr>
+<tr><td style='text-align: center;'> C</td><td><a href="seaice_only_D_case">seaice_only_D_case</a></td><td colspan=2>More experiments with seaice-only D case </td></tr>
+</table>
+<p class='hitextb'>
+Copy the scripts to your directory
+</p>
+<input type='hidden' id="AllTestScripts" value="cp -rp /global/cfs/cdirs/e3sm/www/Tutorials/2024/scripts/* ~/E3SM_scripts/.">
+<ul>
+<p class='hitext0'>
+mkdir ~/E3SM_scripts # if not created yet <br>
+cp -rp /global/cfs/cdirs/e3sm/www/Tutorials/2024/scripts/* ~/E3SM_scripts/.
+<img src="../images/copy-icon.png" width=20 alt='copy' onclick="copyCMD('AllTestScripts');"> <br>
+</p>
+</ul>
+<p class='hitextb'>
+Experimenting eam namelist parameters: use <a href="run.v3.LR.amip_0101_b2000.pm-cpu.sh">run.v3.LR.amip_0101_b2000.pm-cpu.sh</a><br>
+</p>
+<ol>
+ <p class='hitext'>
+ <li> ZM fractional convective entrainment rate (zmconv_dmpdz) and tubulent mountain stress (do_tms) <br><br>
+
+ After 1-day simulation is completed, run the following from command-line
+ </p>
+ <p class='hitext0'>
+ export FILENAME=$PSCRATCH/E3SMv3/Tutorials/v3.LR.amip_0101_b2000.pm-cpu/tests/custom-2_1x1_ndays/run/v3.LR.amip_0101_b2000.pm-cpu.eam.h1.2000-01-02-00000.nc
+ </p>
+ <p class='hitext'>
+ ~wlin/bin/gmeanflex.sh
+ </p>
+
+ <li> History output variables and history output tapes
+
+</ol>
+
+<ul>
+ <br><p class='hitext'>
+ <button id='showResults'  onClick=document.getElementById('checkZMTMSResults').style.visibility='visible'> Reference dmpdz & TMS experiment results </button>
+ <div id='checkZMTMSResults' style="position: relative; visibility:hidden;">
+ Default run: 
+ <pre>
+
+ File processed is :v3.LR.amip_0101_b2000.pm-cpu.eam.h1.2000-01-02-00000.nc
+
+ Global mean AODVIS:	 0.1022
+
+ Global mean AODDUST:	 0.0187
+
+ Global mean U10:	 6.5973
+
+ Global mean CLDHGH:	 0.4643
+
+ Global mean CLDHGH_CAL:	 36.1248
+
+ Global mean CLDTOT:	 0.7270
+
+ Global mean LWCF:	 24.4983
+
+ Global mean TREFHT:	 285.4145
+
+ </pre>
+
+ Entrainment rate change:
+ <pre>
+ File processed is :v3.LR.amip_0101_b2000.pm-cpu.eam.h1.2000-01-02-00000.nc
+
+ Global mean AODVIS:	 0.1020
+
+ Global mean AODDUST:	 0.0187
+
+ Global mean U10:	 6.6031
+
+ Global mean CLDHGH:	 0.4654
+
+ Global mean CLDHGH_CAL:	 36.3914
+
+ Global mean CLDTOT:	 0.7273
+
+ Global mean LWCF:	 25.1156
+
+ Global mean TREFHT:	 285.4110
+ </pre>
+ Turbulent mountain stress
+ <pre>
+ File processed is :v3.LR.amip_0101_b2000.pm-cpu.eam.h1.2000-01-02-00000.nc
+
+ Global mean AODVIS:	 0.1001
+
+ Global mean AODDUST:	 0.0170
+
+ Global mean U10:	 5.9260
+
+ Global mean CLDHGH:	 0.4652
+
+ Global mean CLDHGH_CAL:	 36.2502
+
+ Global mean CLDTOT:	 0.7254
+
+ Global mean LWCF:	 24.4898
+
+ Global mean TREFHT:	 285.4726
+ </pre>
+ </div>
+
+ </p>
+
+
+</ul>
+
+<script>
+function copyCMD(fieldId) {
+  var copyText = document.getElementById(fieldId);
+  // Copy the text associated with the fieldId
+  navigator.clipboard.writeText(copyText.value);
+}
+</script>
+</body>
+
+</html>

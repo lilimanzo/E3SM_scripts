@@ -1,0 +1,8 @@
+Detected E3SM supported machine: pm-cpu
+Using the following config files:
+   /global/common/software/e3sm/anaconda_envs/base/envs/e3sm_unified_1.10.0_pm-cpu/lib/python3.10/site-packages/mpas_analysis/default.cfg
+   /global/common/software/e3sm/anaconda_envs/base/envs/e3sm_unified_1.10.0_pm-cpu/lib/python3.10/site-packages/mache/machines/pm-cpu.cfg
+   /global/common/software/e3sm/anaconda_envs/base/envs/e3sm_unified_1.10.0_pm-cpu/lib/python3.10/site-packages/mpas_analysis/configuration/pm-cpu.cfg
+   /global/common/software/e3sm/anaconda_envs/base/envs/e3sm_unified_1.10.0_pm-cpu/lib/python3.10/site-packages/mpas_analysis/__main__.py
+   /global/u1/l/lili/E3SM_scripts/my_exercise1.cfg
+copying /global/u1/l/lili/E3SM_scripts/my_exercise1.cfg to HTML dir.

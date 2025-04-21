@@ -1,0 +1,2 @@
+ I expect the script to generate climatologies and calculate averages of output data
+

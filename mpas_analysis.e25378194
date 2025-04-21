@@ -1,0 +1,21 @@
+
+Lmod is automatically replacing "gcc-native/12.3" with "gcc/12.2.0".
+
+
+The following have been reloaded with a version change:
+  1) gcc/12.2.0 => gcc/11.2.0
+
+
+The following have been reloaded with a version change:
+  1) craype/2.7.30 => craype/2.7.20
+
+Traceback (most recent call last):
+  File "/global/common/software/e3sm/anaconda_envs/base/envs/e3sm_unified_1.10.0_pm-cpu/bin/mpas_analysis", line 10, in <module>
+    sys.exit(main())
+  File "/global/common/software/e3sm/anaconda_envs/base/envs/e3sm_unified_1.10.0_pm-cpu/lib/python3.10/site-packages/mpas_analysis/__main__.py", line 1010, in main
+    copyfile(config_filename, f'{html_base_directory}/{basename}')
+  File "/global/common/software/e3sm/anaconda_envs/base/envs/e3sm_unified_1.10.0_pm-cpu/lib/python3.10/site-packages/mpas_analysis/shared/io/utility.py", line 368, in copyfile
+    shutil.copyfile(src, dst)
+  File "/global/common/software/e3sm/anaconda_envs/base/envs/e3sm_unified_1.10.0_pm-cpu/lib/python3.10/shutil.py", line 256, in copyfile
+    with open(dst, 'wb') as fdst:
+FileNotFoundError: [Errno 2] No such file or directory: '/global/cfs/cdirs/ntrain/www/lili/e3sm2024tutorial/exercise1/my_exercise1.cfg'

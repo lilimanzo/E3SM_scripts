@@ -23,7 +23,7 @@ readonly COMPSET="WCYCL1850NS"
 readonly RESOLUTION="ne4pg2_oQU480"
 #readonly NL_MAPS=true   ### nonlinear maps for tri-grid
 readonly NL_MAPS=false
-readonly CASE_NAME="v3.LR.WCYCL1850.pm-cpu.test872"
+readonly CASE_NAME="v3.LR.WCYCL1850.pm-cpu.test940"
 
 
 # Code and compilation
@@ -40,9 +40,9 @@ readonly START_DATE="1850-01-01"
 readonly GET_REFCASE=FALSE
 
 # Set paths
-readonly CODE_ROOT="/global/homes/l/lili/E3SM.clean.04182025"
+readonly CODE_ROOT="/global/homes/l/lili/E3SM.oceanonly"
 #readonly CODE_ROOT="/global/homes/l/lili/E3SMv3/${CASE_NAME}/code/${CHECKOUT}"
-readonly CASE_ROOT="${SCRATCH}/E3SM.clean.04182025/${CASE_NAME}"
+readonly CASE_ROOT="${SCRATCH}/E3SM.oceanonly-fg/${CASE_NAME}"
 
 # Sub-directories
 readonly CASE_BUILD_DIR=${CASE_ROOT}/build
@@ -50,7 +50,7 @@ readonly CASE_ARCHIVE_DIR=${CASE_ROOT}/archive
 
 # Uncomment lines below only for priority partition on chrysalis
 #readonly CHARGE_ACCOUNT="priority"
-readonly JOB_QUEUE="debug" # uncomment for debug queue
+#readonly JOB_QUEUE="debug" # uncomment for debug queue
 
 # Define type of run
 #  short tests: 'XS_1x10_ndays', 'XS_2x5_ndays', 'S_1x10_ndays', 'M_1x10_ndays', 'L_1x10_ndays'
@@ -58,6 +58,7 @@ readonly JOB_QUEUE="debug" # uncomment for debug queue
 
 #readonly run='S_1x10_ndays'
 readonly run='S_2x1_ndays'  # was 2x1- rst x days
+#readonly run='custom-21_2x1' 
 #readonly run='custom-52_1x10_ndays'
 #readonly run='custom-104_1x10_ndays'
 
@@ -124,7 +125,7 @@ fetch_code
 create_newcase
 
 # Custom PE layout
-#custom_pelayout
+#custom_pelayout # LM uncommented test915
 
 # Setup
 case_setup
@@ -153,11 +154,11 @@ echo $'\n----- All done -----\n'
 user_nl() {
 
 cat << EOF >> user_nl_eam
-	nhtfrq = 1
+	nhtfrq = 0
 EOF
 
 cat << EOF >> user_nl_elm
-	hist_nhtfrq = 1, -24
+	hist_nhtfrq = 0, 0
 	hist_fincl1 = 'ALBD', 'ALBGRD', 'ALBGRI', 'ALBI'
 	hist_fincl2 = 'ALBD', 'ALBGRD', 'ALBGRI', 'ALBI'
 	
@@ -168,9 +169,9 @@ cat << EOF >> user_nl_mpaso
 EOF
 
 cat << EOF >> user_nl_mpassi
-	config_am_timeseriesstatsdaily_compute_on_startup = true                                             
-	config_am_timeseriesstatsdaily_enable = true                                                   
- 	config_am_timeseriesstatsdaily_write_on_startup = true 
+	config_am_timeseriesstatsmonthly_compute_on_startup = true                                             
+	config_am_timeseriesstatsmonthly_enable = true                                                   
+ 	config_am_timeseriesstatsmonthly_write_on_startup = true 
 EOF
 
 }
@@ -194,15 +195,16 @@ custom_pelayout(){
 if [[ ${PELAYOUT} == custom-* ]];
 then
     echo $'\n CUSTOMIZE PROCESSOR CONFIGURATION:'
-
+ 
+    # LM commented if statement
     # Number of cores per node (machine specific)
-    if [ "${MACHINE}" == "chrysalis" ]; then
+    #if [ "${MACHINE}" == "chrysalis" ]; then
         ncore=64
         hthrd=2  # hyper-threading
-    else
-        echo 'ERROR: MACHINE = '${MACHINE}' is not supported for current custom PE layout setting.'
-        exit 400
-    fi
+    #else
+    #    echo 'ERROR: MACHINE = '${MACHINE}' is not supported for current custom PE layout setting.'
+    #    exit 400
+    #fi
 
     # Extract number of nodes
     tmp=($(echo ${PELAYOUT} | tr "-" " "))
@@ -250,6 +252,36 @@ then
       ./xmlchange LND_ROOTPE=2176
       ./xmlchange ROF_ROOTPE=2176
 
+    elif [ "${nnodes}" == "21" ]; then
+
+       echo Using Juans custom 21 nodes layout
+
+      export NPROCS_ATM=1800
+      export NPROCS_LND=768
+      export NPROCS_ROF=768
+      export NPROCS_ICE=1152
+      export NPROCS_OCN=768
+      export NPROCS_CPL=1920
+      export NPROCS_WAV=1
+      export NPROCS_GLC=1
+      export NPROCS_ESP=1
+      export NPROCS_IAC=1
+
+      ./xmlchange --file env_mach_pes.xml  --id PSTRID_CPL  --val 1
+      ./xmlchange --file env_mach_pes.xml  --id NTASKS_CPL  --val $NPROCS_CPL
+      ./xmlchange --file env_mach_pes.xml  --id NTASKS_ATM  --val $NPROCS_ATM
+      ./xmlchange --file env_mach_pes.xml  --id NTASKS_LND  --val $NPROCS_LND
+      ./xmlchange --file env_mach_pes.xml  --id NTASKS_ROF  --val $NPROCS_ROF
+      ./xmlchange --file env_mach_pes.xml  --id NTASKS_ICE  --val $NPROCS_ICE
+      ./xmlchange --file env_mach_pes.xml  --id NTASKS_OCN  --val $NPROCS_OCN
+      ./xmlchange --file env_mach_pes.xml  --id NTASKS_GLC  --val $NPROCS_GLC
+      ./xmlchange --file env_mach_pes.xml  --id NTASKS_WAV  --val $NPROCS_WAV
+      ./xmlchange --file env_mach_pes.xml  --id NTASKS_ESP  --val $NPROCS_ESP
+      ./xmlchange --file env_mach_pes.xml  --id NTASKS_IAC  --val $NPROCS_IAC
+
+      ./xmlchange LND_ROOTPE=1152
+      ./xmlchange ROF_ROOTPE=1152
+      ./xmlchange OCN_ROOTPE=1920
     else
 
        echo 'ERRROR: unsupported layout '${PELAYOUT}
@@ -370,7 +402,7 @@ case_setup() {
     # ./xmlchange --file env_run.xml --id ELM_BLDNML_OPTS  --val "-bgc bgc -nutrient cnp -nutrient_comp_pathway rd  -soil_decomp ctc -methane"
     
     # LM change to RASM2
-    ./xmlchange --file env_run.xml --id CPL_SEQ_OPTION --val "RASM_OPTION2" 
+    ./xmlchange --file env_run.xml --id CPL_SEQ_OPTION --val "RASM_OPTION1" 
 
 
     # Build with COSP, except for a data atmosphere (datm)

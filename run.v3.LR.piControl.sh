@@ -19,7 +19,7 @@ readonly PROJECT="e3sm"
 # Simulation
 readonly COMPSET="WCYCL1850"
 readonly RESOLUTION="ne30pg2_r05_IcoswISC30E3r5"
-readonly CASE_NAME="v3.LR.piControl.test6"
+readonly CASE_NAME="v3.LR.piControl.test17"
 # If this is part of a simulation campaign, ask your group lead about using a case_group label
 # otherwise, comment out
 #readonly CASE_GROUP="v3.LR"
@@ -41,21 +41,22 @@ readonly RUN_REFCASE="20231209.v3.LR.piControl-spinup.chrysalis"
 readonly RUN_REFDATE="2001-01-01"
 
 # Set paths
-readonly CODE_ROOT="/${HOME}/E3SM.3LM"
-readonly CASE_ROOT="/pscratch/sd/l/${USER}/E3SM.3LM/${CASE_NAME}"
+readonly CODE_ROOT="/${HOME}/E3SM.clean"
+readonly CASE_ROOT="/pscratch/sd/l/${USER}/E3SM.clean/${CASE_NAME}"
 
 # Sub-directories
 readonly CASE_BUILD_DIR=${CASE_ROOT}/build
 readonly CASE_ARCHIVE_DIR=${CASE_ROOT}/archive
 
-readonly JOB_QUEUE="debug"
+#readonly JOB_QUEUE="debug"
 
 # Define type of run
 #  short tests: 'XS_1x10_ndays', 'XS_2x5_ndays', 'S_1x10_ndays', 'M_1x10_ndays', 'L_1x10_ndays'
 #  or 'production' for full simulation
 
 #readonly run='L_1x10_ndays'  # build with this to ensure non-threading
-readonly run='S_1x2_ndays'
+#readonly run='S_2x5_ndays'
+readonly run='custom-21_1x2_ndays'
 #readonly run='S_2x5_ndays'
 #readonly run='M_1x10_ndays'
 
@@ -73,7 +74,7 @@ if [[ "${run}" != "production" ]]; then
   readonly CASE_SCRIPTS_DIR=${CASE_ROOT}/tests/${run}/case_scripts
   readonly CASE_RUN_DIR=${CASE_ROOT}/tests/${run}/run
   readonly PELAYOUT=${layout}
-  readonly WALLTIME="0:40:00"
+  readonly WALLTIME="0:20:00"
   readonly STOP_OPTION=${units}
   readonly STOP_N=${length}
   readonly REST_OPTION=${STOP_OPTION}
@@ -97,7 +98,7 @@ else
 fi
 
 # Coupler history 
-readonly HIST_OPTION="nsteps"
+readonly HIST_OPTION="nmonths"
 readonly HIST_N="1"
 
 # Leave empty (unless you understand what it does)
@@ -280,13 +281,13 @@ then
     echo $'\n CUSTOMIZE PROCESSOR CONFIGURATION:'
 
     # Number of cores per node (machine specific)
-    if [ "${MACHINE}" == "chrysalis" ]; then
+    #if [ "${MACHINE}" == "chrysalis" ]; then
         ncore=64
         hthrd=2  # hyper-threading
-    else
-        echo 'ERROR: MACHINE = '${MACHINE}' is not supported for current custom PE layout setting.'
-        exit 400
-    fi
+    #else
+    #    echo 'ERROR: MACHINE = '${MACHINE}' is not supported for current custom PE layout setting.'
+    #    exit 400
+    #fi
 
     # Extract number of nodes
     tmp=($(echo ${PELAYOUT} | tr "-" " "))
@@ -332,9 +333,55 @@ then
       ./xmlchange LND_ROOTPE=2176
       ./xmlchange ROF_ROOTPE=2176
 
+    elif [ "${nnodes}" == "21" ]; then
+
+       echo Using Juans custom 21 nodes layout
+
+      # orig
+      #./xmlchange CPL_NTASKS=704
+      #./xmlchange ATM_NTASKS=675
+      #./xmlchange OCN_NTASKS=128
+      #./xmlchange LND_NTASKS=128
+      #./xmlchange ROF_NTASKS=128
+      #./xmlchange ICE_NTASKS=576
+      
+      #./xmlchange OCN_ROOTPE=704
+      #./xmlchange LND_ROOTPE=576
+      #./xmlchange ROF_ROOTPE=576
+      #./xmlchange ATM_ROOTPE=0
+      #./xmlchange CPL_ROOTPE=0
+      #./xmlchange ICE_ROOTPE=0
+
+      export NPROCS_ATM=1800
+      export NPROCS_LND=768
+      export NPROCS_ROF=768
+      export NPROCS_ICE=1152
+      export NPROCS_OCN=768
+      export NPROCS_CPL=1920
+      export NPROCS_WAV=1
+      export NPROCS_GLC=1
+      export NPROCS_ESP=1
+      export NPROCS_IAC=1
+
+      ./xmlchange --file env_mach_pes.xml  --id PSTRID_CPL  --val 1
+      ./xmlchange --file env_mach_pes.xml  --id NTASKS_CPL  --val $NPROCS_CPL
+      ./xmlchange --file env_mach_pes.xml  --id NTASKS_ATM  --val $NPROCS_ATM
+      ./xmlchange --file env_mach_pes.xml  --id NTASKS_LND  --val $NPROCS_LND
+      ./xmlchange --file env_mach_pes.xml  --id NTASKS_ROF  --val $NPROCS_ROF
+      ./xmlchange --file env_mach_pes.xml  --id NTASKS_ICE  --val $NPROCS_ICE
+      ./xmlchange --file env_mach_pes.xml  --id NTASKS_OCN  --val $NPROCS_OCN
+      ./xmlchange --file env_mach_pes.xml  --id NTASKS_GLC  --val $NPROCS_GLC
+      ./xmlchange --file env_mach_pes.xml  --id NTASKS_WAV  --val $NPROCS_WAV
+      ./xmlchange --file env_mach_pes.xml  --id NTASKS_ESP  --val $NPROCS_ESP
+      ./xmlchange --file env_mach_pes.xml  --id NTASKS_IAC  --val $NPROCS_IAC
+
+      ./xmlchange LND_ROOTPE=1152
+      ./xmlchange ROF_ROOTPE=1152
+      ./xmlchange OCN_ROOTPE=1920
+
     else
 
-       echo 'ERRROR: unsupported layout '${PELAYOUT}
+       echo 'ERROR: unsupported layout '${PELAYOUT}
        exit 401
 
     fi
@@ -462,7 +509,7 @@ case_setup() {
     ./xmlchange DOUT_S_ROOT=${CASE_ARCHIVE_DIR}
 
     # LM change to RASM2
-    ./xmlchange --file env_run.xml --id CPL_SEQ_OPTION --val "RASM_OPTION2"
+    ./xmlchange --file env_run.xml --id CPL_SEQ_OPTION --val "RASM_OPTION1"
 
     # Build with COSP, except for a data atmosphere (datm)
     if [ `./xmlquery --value COMP_ATM` == "datm"  ]; then 

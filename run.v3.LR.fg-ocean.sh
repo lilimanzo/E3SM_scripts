@@ -299,8 +299,8 @@ then
     ./xmlchange NTASKS=1
     ./xmlchange NTHRDS=1
     ./xmlchange ROOTPE=0
-    ./xmlchange MAX_MPITASKS_PER_NODE=$ncore
-    ./xmlchange MAX_TASKS_PER_NODE=$(( $ncore * $hthrd))
+    ./xmlchange MAX_MPITASKS_PER_NODE=128
+    ./xmlchange MAX_TASKS_PER_NODE=256
 
     # Layout-specific customization
     if [ "${nnodes}" == "104" ]; then

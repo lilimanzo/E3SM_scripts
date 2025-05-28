@@ -23,7 +23,7 @@ readonly COMPSET="WCYCL1850NS"
 readonly RESOLUTION="ne4pg2_oQU480"
 #readonly NL_MAPS=true   ### nonlinear maps for tri-grid
 readonly NL_MAPS=false
-readonly CASE_NAME="v3.LR.WCYCL1850.pm-cpu.test940"
+readonly CASE_NAME="v3.LR.WCYCL1850.pm-cpu.test946"
 
 
 # Code and compilation
@@ -42,7 +42,7 @@ readonly GET_REFCASE=FALSE
 # Set paths
 readonly CODE_ROOT="/global/homes/l/lili/E3SM.oceanonly"
 #readonly CODE_ROOT="/global/homes/l/lili/E3SMv3/${CASE_NAME}/code/${CHECKOUT}"
-readonly CASE_ROOT="${SCRATCH}/E3SM.oceanonly-fg/${CASE_NAME}"
+readonly CASE_ROOT="${SCRATCH}/E3SM.oceanonly-bb/${CASE_NAME}"
 
 # Sub-directories
 readonly CASE_BUILD_DIR=${CASE_ROOT}/build
@@ -154,7 +154,7 @@ echo $'\n----- All done -----\n'
 user_nl() {
 
 cat << EOF >> user_nl_eam
-	nhtfrq = 0
+	nhtfrq = -1
 EOF
 
 cat << EOF >> user_nl_elm

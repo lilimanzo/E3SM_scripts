@@ -19,7 +19,7 @@ readonly PROJECT="e3sm"
 # Simulation
 readonly COMPSET="WCYCL1850"
 readonly RESOLUTION="ne30pg2_r05_IcoswISC30E3r5"
-readonly CASE_NAME="v3.LR.eg-ocean.test1"
+readonly CASE_NAME="v3.LR.eg-ocean.test2"
 # If this is part of a simulation campaign, ask your group lead about using a case_group label
 # otherwise, comment out
 #readonly CASE_GROUP="v3.LR"
@@ -59,7 +59,7 @@ readonly CASE_ARCHIVE_DIR=${CASE_ROOT}/archive
 
 #readonly run='L_1x10_ndays'  # build with this to ensure non-threading
 #readonly run='S_2x5_ndays'
-readonly run='custom-21_25x48_nmonths'
+readonly run='custom-21_1x10_ndays'
 #readonly run='S_2x5_ndays'
 #readonly run='M_1x10_ndays'
 
@@ -77,7 +77,7 @@ if [[ "${run}" != "production" ]]; then
   readonly CASE_SCRIPTS_DIR=${CASE_ROOT}/tests/${run}/case_scripts
   readonly CASE_RUN_DIR=${CASE_ROOT}/tests/${run}/run
   readonly PELAYOUT=${layout}
-  readonly WALLTIME="11:00:00"
+  readonly WALLTIME="00:15:00"
   readonly STOP_OPTION=${units}
   readonly STOP_N=${length}
   readonly REST_OPTION=${STOP_OPTION}
@@ -299,8 +299,8 @@ then
     ./xmlchange NTASKS=1
     ./xmlchange NTHRDS=1
     ./xmlchange ROOTPE=0
-    ./xmlchange MAX_MPITASKS_PER_NODE=$ncore
-    ./xmlchange MAX_TASKS_PER_NODE=$(( $ncore * $hthrd))
+    ./xmlchange MAX_MPITASKS_PER_NODE=128  # $ncore LM changed after test1 first submission
+    ./xmlchange MAX_TASKS_PER_NODE=256 # $(( $ncore * $hthrd)) LM changed after test1 first submission
 
     # Layout-specific customization
     if [ "${nnodes}" == "104" ]; then

@@ -19,7 +19,7 @@ readonly PROJECT="e3sm"
 # Simulation
 readonly COMPSET="WCYCL1850"
 readonly RESOLUTION="ne30pg2_r05_IcoswISC30E3r5"
-readonly CASE_NAME="v3.LR.bb-ocean.test1"
+readonly CASE_NAME="v3.LR.bb-ocean.test6"
 # If this is part of a simulation campaign, ask your group lead about using a case_group label
 # otherwise, comment out
 #readonly CASE_GROUP="v3.LR"
@@ -59,7 +59,7 @@ readonly CASE_ARCHIVE_DIR=${CASE_ROOT}/archive
 
 #readonly run='L_1x10_ndays'  # build with this to ensure non-threading
 #readonly run='S_2x5_ndays'
-readonly run='custom-21_11x48_nmonths'
+readonly run='custom-21_2x1_nmonths'
 #readonly run='S_2x5_ndays'
 #readonly run='M_1x10_ndays'
 
@@ -77,7 +77,7 @@ if [[ "${run}" != "production" ]]; then
   readonly CASE_SCRIPTS_DIR=${CASE_ROOT}/tests/${run}/case_scripts
   readonly CASE_RUN_DIR=${CASE_ROOT}/tests/${run}/run
   readonly PELAYOUT=${layout}
-  readonly WALLTIME="10:00:00"
+  readonly WALLTIME="00:30:00"
   readonly STOP_OPTION=${units}
   readonly STOP_N=${length}
   readonly REST_OPTION=${STOP_OPTION}
@@ -102,7 +102,7 @@ fi
 
 # Coupler history 
 readonly HIST_OPTION="nmonths"
-readonly HIST_N="2"
+readonly HIST_N="1"
 
 # Leave empty (unless you understand what it does)
 readonly OLD_EXECUTABLE=""

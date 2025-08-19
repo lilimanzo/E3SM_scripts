@@ -17,13 +17,14 @@ readonly MACHINE=pm-cpu
 readonly PROJECT="e3sm"
 
 # Simulation
-readonly COMPSET="WCYCL1850NS"
-#readonly COMPSET="WCYCL1850"
-#readonly RESOLUTION="ne30pg2_r05_IcoswISC30E3r5"
-readonly RESOLUTION="ne4pg2_oQU480"
-#readonly NL_MAPS=true   ### nonlinear maps for tri-grid
-readonly NL_MAPS=false
-readonly CASE_NAME="v3.LR.WCYCL1850.pm-cpu.test946"
+#readonly COMPSET="WCYCL1850NS"
+readonly COMPSET="WCYCL1850"
+readonly RESOLUTION="ne30pg2_r05_IcoswISC30E3r5"
+#readonly RESOLUTION="ne30pg2_IcoswISC30E3r5"
+#readonly RESOLUTION="ne4pg2_oQU480"
+readonly NL_MAPS=true   ### nonlinear maps for tri-grid
+#readonly NL_MAPS=false
+readonly CASE_NAME="v3.LR.WCYCL1850.pm-cpu.test1006"
 
 
 # Code and compilation
@@ -42,7 +43,7 @@ readonly GET_REFCASE=FALSE
 # Set paths
 readonly CODE_ROOT="/global/homes/l/lili/E3SM.oceanonly"
 #readonly CODE_ROOT="/global/homes/l/lili/E3SMv3/${CASE_NAME}/code/${CHECKOUT}"
-readonly CASE_ROOT="${SCRATCH}/E3SM.oceanonly-bb/${CASE_NAME}"
+readonly CASE_ROOT="${SCRATCH}/oceanonly-bb/${CASE_NAME}"
 
 # Sub-directories
 readonly CASE_BUILD_DIR=${CASE_ROOT}/build
@@ -57,7 +58,7 @@ readonly CASE_ARCHIVE_DIR=${CASE_ROOT}/archive
 #  or 'production' for full simulation
 
 #readonly run='S_1x10_ndays'
-readonly run='S_2x1_ndays'  # was 2x1- rst x days
+readonly run='S_1x1_nmonths'  # was 2x1- rst x days
 #readonly run='custom-21_2x1' 
 #readonly run='custom-52_1x10_ndays'
 #readonly run='custom-104_1x10_ndays'
@@ -76,7 +77,7 @@ if [[ "${run}" != "production" ]]; then
   readonly CASE_SCRIPTS_DIR=${CASE_ROOT}/tests/${run}/case_scripts
   readonly CASE_RUN_DIR=${CASE_ROOT}/tests/${run}/run
   readonly PELAYOUT=${layout}
-  readonly WALLTIME="0:10:00"
+  readonly WALLTIME="0:40:00"
   readonly STOP_OPTION=${units}
   readonly STOP_N=${length}
   readonly REST_OPTION=${STOP_OPTION}

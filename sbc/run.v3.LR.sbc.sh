@@ -19,7 +19,7 @@ readonly PROJECT="e3sm"
 # Simulation
 readonly COMPSET="WCYCL1850"
 readonly RESOLUTION="ne30pg2_r05_IcoswISC30E3r5"
-readonly CASE_NAME="v3.LR.bb-ocean.test65"
+readonly CASE_NAME="v3.LR.sbc.test1012"
 # If this is part of a simulation campaign, ask your group lead about using a case_group label
 # otherwise, comment out
 #readonly CASE_GROUP="v3.LR"
@@ -44,8 +44,8 @@ readonly RUN_REFDATE="2001-01-01"
 #readonly RUN_REFDATE="2001-01-01"
 
 # Set paths
-readonly CODE_ROOT="/${HOME}/E3SM.master"
-readonly CASE_ROOT="/pscratch/sd/l/${USER}/bb/ocean/${CASE_NAME}"
+readonly CODE_ROOT="/${HOME}/E3SMv3.0.0"
+readonly CASE_ROOT="/pscratch/sd/l/${USER}/sbc/${CASE_NAME}"
 
 # Sub-directories
 readonly CASE_BUILD_DIR=${CASE_ROOT}/build
@@ -57,9 +57,9 @@ readonly CASE_ARCHIVE_DIR=${CASE_ROOT}/archive
 #  short tests: 'XS_1x10_ndays', 'XS_2x5_ndays', 'S_1x10_ndays', 'M_1x10_ndays', 'L_1x10_ndays'
 #  or 'production' for full simulation
 
-readonly run='L_1x1_nmonths'  # build with this to ensure non-threading
-#readonly run='S_2x5_ndays'
-#readonly run='custom-21_1x1_nmonths'
+#readonly run='L_1x10_ndays'  # build with this to ensure non-threading
+readonly run='S_2x1_ndays'
+#readonly run='custom-21_2x1_nmonths'
 #readonly run='S_2x5_ndays'
 #readonly run='M_1x1_nmonths'
 
@@ -77,7 +77,7 @@ if [[ "${run}" != "production" ]]; then
   readonly CASE_SCRIPTS_DIR=${CASE_ROOT}/tests/${run}/case_scripts
   readonly CASE_RUN_DIR=${CASE_ROOT}/tests/${run}/run
   readonly PELAYOUT=${layout}
-  readonly WALLTIME="00:30:00"
+  readonly WALLTIME="00:20:00"
   readonly STOP_OPTION=${units}
   readonly STOP_N=${length}
   readonly REST_OPTION=${STOP_OPTION}
@@ -101,7 +101,7 @@ else
 fi
 
 # Coupler history 
-readonly HIST_OPTION="nmonths"
+readonly HIST_OPTION="nsteps"
 readonly HIST_N="1"
 
 # Leave empty (unless you understand what it does)
@@ -160,7 +160,7 @@ cat << EOF >> user_nl_eam
  empty_htapes = .true.
 
  avgflag_pertape = 'A','I'
- nhtfrq = 0,-24
+ nhtfrq = 0,-1
  mfilt  = 12,365
 
  fincl1 = 'CLDLOW','CLDMED','CLDHGH','CLDTOT',
@@ -180,11 +180,8 @@ cat << EOF >> user_nl_eam
 	  'V1000','V975','V950','V925','V900','V850',
 	  'Z1000','Z975','Z950','Z925','Z900','Z850',
 	  'OMEGA1000','OMEGA975','OMEGA950','OMEGA925','OMEGA900','OMEGA850',
-	  'PS','TUQ','TVQ','UBOT','VBOT','TBOT',
- 	  'TRAD','FLUS_BND1','FLUS_BND2','FLUS_BND3','FLUS_BND4','FLUS_BND5','FLUS_BND6',
-	  'FLUS_BND7','FLUS_BND8','FLUS_BND9','FLUS_BND10','FLUS_BND11',
-	  'FLUS_SB','LWUP','FLUS'
- fincl2 = 'FLUS', 'TRAD', 'LWUP'
+	  'PS','TUQ','TVQ','UBOT','VBOT','TBOT'
+ fincl2 = 'FLNS', 'FLDS'
 
  ! -- chemUCI settings ------------------
  history_chemdyg_summary = .false.

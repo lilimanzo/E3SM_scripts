@@ -1,105 +1,3 @@
-<html>
-<style>
-/* unvisited link */
-a:link {
-    text-decoration: none;
-    color: blue;
-}
-
-/* visited link */
-a:visited {
-    color: green;
-}
-
-/* mouse over link */
-a:hover {
-    color: hotpink;
-}
-
-/* selected link */
-a:active {
-    color: red;
-}
-
-td,th
-{border-left:1px solid black;
- border-top:1px solid black;
- text-align: left;
- height: 35px}
-table
-{border-right:1px solid black;
-border-bottom:1px solid black;}
-
-.hitexta {font-size: 2.0em; color:DarkBlue}
-.hitext {font-size: 1.5em; color:DarkBlue}
-.hitextb {font-size: 1.5em; color:Black}
-.hitext0 {font-size: 1.0em; color:DarkBlue}
-.hitext2 {line-height: 1.8em; font-size: 1.5em;  color:DarkOrange}
-
-
-</style>
-<title>E3SM Tutorials Practice Scripts</title>
-<body leftmargin=30>
-
-<img src="../images/e3sm_template_banner1.png">
-<p>
-
-<p class='hitexta'>
-URL: https://portal.nersc.gov/project/e3sm/Tutorials/2024/scripts/
-</p>
-<br>
-<table>
-<tr><th width=400>Run script</th><th width=750>Description</th></tr>
-<tr><td><a href="run.v3.LR.historical_0101.pm-cpu.sh">run.v3.LR.historical_0101.pm-cpu.sh</a></td><td colspan=2>Historical simulation, hybrid start off year 0101 of piControl</td></tr>
-<tr><td><a href="run.v3.LR.historical_0101_b2000.pm-cpu.sh">run.v3.LR.historical_0101_b2000.pm-cpu.sh</a></td><td colspan=2>Historical simulation, branch off year 2000 of an existing historial run</td></tr>
-</table>
-
-<ul><ul>
-<li><a href="https://docs.e3sm.org/E3SM/">General User's Guide for running coupled E3SM or standalone component model configurations</a>
-<li>Step-by-step guide for running E3SM using a run script
-<ul class='hitextb'>
-<li><a href="https://docs.e3sm.org/running-e3sm-guide/guide-prior-to-production/">Pre-Production</a>
-<li><a href="https://docs.e3sm.org/running-e3sm-guide/guide-production/">Production</a>
-</ul>
-<p>
-<br>
-<a name="topOfScript"></a>
-<p class="hitextb">
-Example run script: <a href="run.v3.LR.historical_0101_b2000.pm-cpu.sh">run.v3.LR.historical_0101_b2000.pm-cpu.sh</a><br>
-<ul><li><a href="#AllItDoes">What does this script do?</a></ul>
-</b>
-<p class='hitextb'>
-Copy the script to your home directory
-</P>
-<input type='hidden' id="runHistScript" value="cp -p /global/cfs/cdirs/e3sm/www/Tutorials/2024/scripts/run.v3.LR.historical_0101_b2000.pm-cpu.sh ~/E3SM_scripts/.">
-<p class='hitext'>
-mkdir ~/E3SM_scripts <br>
-</p>
-<p class="hitext0">
-cp -p /global/cfs/cdirs/e3sm/www/Tutorials/2024/scripts/run.v3.LR.historical_0101_b2000.pm-cpu.sh ~/E3SM_scripts/. 
-<img src="../images/copy-icon.png" width=20 alt='copy' onclick="copyCMD('runHistScript');">
-<br>
-</p>
-<a name="RunCtrl"></a>
-<p class='hitextb'>
-Run the script (<a href="#createNewcase">create case</a>, <a href="#caseBuild">build</a>, <a href="#caseSetup">setup</a>, and <a href="#caseSubmit">submit</a> to run for <a href="#casePElayout">1 day using 2 nodes</a>)
-</p>
-<input type='hidden' id="run1dCMD" value="./run.v3.LR.historical_0101_b2000.pm-cpu.sh">
-<p class='hitext'>
-cd ~/E3SM_scripts <br>
-./run.v3.LR.historical_0101_b2000.pm-cpu.sh
-<img src="../images/copy-icon.png" width=20 alt='copy' onclick="copyCMD('run1dCMD');">
-</p>
-<p class="hitext0">
-<input type='hidden' id="EnterTestDir" value="cd $PSCRATCH/E3SMv3/Tutorials/v3.LR.historical_0101_b2000.pm-cpu/tests/custom-2_1x1_ndays">
-cd $PSCRATCH/E3SMv3/Tutorials/v3.LR.historical_0101_b2000.pm-cpu/tests/custom-2_1x1_ndays 
-<img src="../images/copy-icon.png" width=20 alt='copy' onclick="copyCMD('EnterTestDir');">
-</p>
-
-<li><a href="#RunOneYear">Prepare to run a 1-year coupled simulation</a>
-<br><p>
-<hr width=1000 align=left>
-<pre>
 #!/bin/bash -fe
 
 # E3SM Coupled Model Group run_e3sm script template.
@@ -109,81 +7,55 @@ cd $PSCRATCH/E3SMv3/Tutorials/v3.LR.historical_0101_b2000.pm-cpu/tests/custom-2_
 
 main() {
 
-# For debugging, uncomment line below
+# For debugging, uncomment libe below
 #set -x
 
 # --- Configuration flags ----
 
 # Machine and project
-</pre>
-<p class="hitext">
-readonly MACHINE=pm-cpu <br>
-readonly PROJECT="ntrain6" <br>
-</p>
+readonly MACHINE=pm-cpu
+readonly PROJECT="e3sm"
 
-<pre>
 # Simulation
-</pre>
-<p class="hitext">
-readonly COMPSET="WCYCL20TR" <br>
-readonly RESOLUTION="ne30pg2_r05_IcoswISC30E3r5" <br>
-readonly CASE_NAME="v3.LR.historical_0101_b2000.pm-cpu" <br>
-</p>
-<pre>
+readonly COMPSET="WCYCL1850"
+readonly RESOLUTION="ne30pg2_r05_IcoswISC30E3r5"
+readonly CASE_NAME="v3.LR.sbc.test1012"
 # If this is part of a simulation campaign, ask your group lead about using a case_group label
 # otherwise, comment out
-readonly CASE_GROUP="Tutorials-2024"
+#readonly CASE_GROUP="v3.LR"
 
 # Code and compilation
-readonly CHECKOUT="20240504"
-</pre> <p class="hitext">
-readonly BRANCH="master"  # 2f10b6c2f4b092da4c8dfcf88aba1bc31164b9e1
-</p><pre>
+readonly CHECKOUT="20240305"
+readonly BRANCH="v3.0.0"  # master as of 2024-03-04 399d4301138617088dd93214123d6c025e061302
 readonly CHERRY=( )
 readonly DEBUG_COMPILE=false
 
 # Run options
-</pre> <p class="hitext">
-readonly MODEL_START_TYPE="branch"  # 'initial', 'continue', 'branch', 'hybrid' <br>
-readonly START_DATE="2000-01-01"
-</p><pre>
+readonly MODEL_START_TYPE="hybrid"  # 'initial', 'continue', 'branch', 'hybrid'
+readonly START_DATE="0001-01-01"
 
 # Additional options for 'branch' and 'hybrid'
 readonly GET_REFCASE=TRUE
-#readonly RUN_REFDIR="$PSCRATCH/E3SMv3/${CASE_NAME}/init/2000-01-01-00000"
-readonly RUN_REFDIR="/global/cfs/cdirs/e3sm/terai/E3SM_restarts/v3.LR.historical_0101/2000-01-01-00000"
-readonly RUN_REFCASE="v3.LR.historical_0101"
-readonly RUN_REFDATE="2000-01-01"
+readonly RUN_REFDIR="/pscratch/sd/j/jtolento/LANL/chrysalis_rst/"
+readonly RUN_REFCASE="20231209.v3.LR.piControl-spinup.chrysalis"
+readonly RUN_REFDATE="2001-01-01"
 
 # Set paths
-</pre> <p class="hitext">
-readonly CODE_ROOT="/global/cfs/cdirs/e3sm/Tutorials/2024/codes/${CHECKOUT}" <br>
-readonly CASE_ROOT="$PSCRATCH/E3SMv3/Tutorials/${CASE_NAME}"
-</p><pre>
+readonly CODE_ROOT="/${HOME}/E3SM.master"
+readonly CASE_ROOT="/pscratch/sd/l/${USER}/sbc/${CASE_NAME}"
 
 # Sub-directories
 readonly CASE_BUILD_DIR=${CASE_ROOT}/build
 readonly CASE_ARCHIVE_DIR=${CASE_ROOT}/archive
-</pre>
-<a name="casePElayout"></a><br>
-<pre>
+
 # Define type of run
 #  short tests: 'XS_1x10_ndays', 'XS_2x5_ndays', 'S_1x10_ndays', 'M_1x10_ndays', 'L_1x10_ndays'
 #  or 'production' for full simulation
-#readonly run='custom-2_1x2_nsteps'
-#readonly run='custom-2_1x3_nhours'
-readonly run='custom-2_1x1_ndays'
-</pre>
-<img src="../images/testNameExplained.png">
-<a href="#runCtrl" style="color: black">&#9166;</a>
-<pre>
-#readonly run='custom-2_1x5_ndays'
-#readonly run='custom-4_1x5_ndays'
-#readonly run='custom-4_1x1_nmonths'
-#readonly run='custom-8_1x5_ndays'
+
+#readonly run='L_1x10_ndays'  # build with this to ensure non-threading
 #readonly run='S_1x10_ndays'
 #readonly run='S_2x5_ndays'
-#readonly run='M_1x10_ndays'
+readonly run='M_1x1_nmonths'
 
 #readonly run='production'
 
@@ -199,7 +71,7 @@ if [[ "${run}" != "production" ]]; then
   readonly CASE_SCRIPTS_DIR=${CASE_ROOT}/tests/${run}/case_scripts
   readonly CASE_RUN_DIR=${CASE_ROOT}/tests/${run}/run
   readonly PELAYOUT=${layout}
-  readonly WALLTIME="2:00:00"
+  readonly WALLTIME="0:30:00"
   readonly STOP_OPTION=${units}
   readonly STOP_N=${length}
   readonly REST_OPTION=${STOP_OPTION}
@@ -212,18 +84,18 @@ else
   # Production simulation
   readonly CASE_SCRIPTS_DIR=${CASE_ROOT}/case_scripts
   readonly CASE_RUN_DIR=${CASE_ROOT}/run
-  readonly PELAYOUT="custom-8"
-  readonly WALLTIME="6:30:00"
+  readonly PELAYOUT="L"
+  readonly WALLTIME="48:00:00"
   readonly STOP_OPTION="nyears"
-  readonly STOP_N="1"
-  readonly REST_OPTION="nmonths"
-  readonly REST_N="3"
-  readonly RESUBMIT="0"
+  readonly STOP_N="50"
+  readonly REST_OPTION="nyears"
+  readonly REST_N="1"
+  readonly RESUBMIT="9"
   readonly DO_SHORT_TERM_ARCHIVING=false
 fi
 
 # Coupler history 
-readonly HIST_OPTION="nyears"
+readonly HIST_OPTION="nmonths"
 readonly HIST_N="1"
 
 # Leave empty (unless you understand what it does)
@@ -233,13 +105,9 @@ readonly OLD_EXECUTABLE=""
 do_fetch_code=false
 do_create_newcase=true
 do_case_setup=true
-</pre> <p class="hitext">
-do_case_build=true <br>
+do_case_build=true
 do_case_submit=true
-</p>
 
-<a name="AllItDoes"></a>
-<pre>
 # --- Now, do the work ---
 
 # Make directories created by this script world-readable
@@ -271,10 +139,8 @@ case_submit
 
 # All done
 echo $'\n----- All done -----\n'
+
 }
-</pre>
-<a href="#topOfScript" style="color: black">&#9166;</a>
-<pre>
 
 # =======================
 # Custom user_nl settings
@@ -299,22 +165,7 @@ cat << EOF >> user_nl_eam
           'ICEFRAC','LANDFRAC','LWCF','OCNFRAC','OMEGA','PRECC','PRECL','PRECSC','PRECSL','PS','PSL','Q',
           'QFLX','QREFHT','RELHUM','SCO','SHFLX','SOLIN','SWCF','T','TAUX','TAUY','TCO',
           'TGCLDLWP','TMQ','TREFHT','TREFMNAV','TREFMXAV','TS','U','U10','V','Z3',
-          'SFbc_a1','SFbc_a3','SFbc_a4','SFdst_a1','SFdst_a3','SFmom_a1','SFmom_a2','SFmom_a3','SFmom_a4',
-          'SFncl_a1','SFncl_a2','SFncl_a3','SFpom_a1','SFpom_a3','SFpom_a4','SFso4_a1','SFso4_a2','SFso4_a3','SFso4_a5',
-          'SFsoa_a1','SFsoa_a2','SFsoa_a3','bc_a4_CLXF','pom_a4_CLXF','so4_a1_CLXF','so4_a2_CLXF',
-          'bc_a1DDF','bc_a3DDF','bc_a4DDF','bc_c1DDF','bc_c3DDF','bc_c4DDF',
-          'dst_a1DDF','dst_a3DDF','dst_c1DDF','dst_c3DDF','mom_a1DDF','mom_a2DDF','mom_a3DDF','mom_a4DDF',
-          'mom_c1DDF','mom_c2DDF','mom_c3DDF','mom_c4DDF','ncl_a1DDF','ncl_a2DDF','ncl_a3DDF','ncl_c1DDF','ncl_c2DDF','ncl_c3DDF',
-          'pom_a1DDF','pom_a3DDF','pom_a4DDF','pom_c1DDF','pom_c3DDF','pom_c4DDF','so4_a1DDF','so4_a2DDF','so4_a3DDF','so4_a5DDF',
-          'so4_c1DDF','so4_c2DDF','so4_c3DDF','so4_c5DDF','soa_a1DDF','soa_a2DDF','soa_a3DDF','soa_c1DDF','soa_c2DDF','soa_c3DDF',
-          'bc_a1SFWET','bc_a3SFWET','bc_a4SFWET','bc_c1SFWET','bc_c3SFWET','bc_c4SFWET',
-          'dst_a1SFWET','dst_a3SFWET','dst_c1SFWET','dst_c3SFWET','mom_a1SFWET','mom_a2SFWET','mom_a3SFWET','mom_a4SFWET',
-          'mom_c1SFWET','mom_c2SFWET','mom_c3SFWET','mom_c4SFWET',
-          'ncl_a1SFWET','ncl_a2SFWET','ncl_a3SFWET','ncl_c1SFWET','ncl_c2SFWET','ncl_c3SFWET',
-          'pom_a1SFWET','pom_a3SFWET','pom_a4SFWET','pom_c1SFWET','pom_c3SFWET','pom_c4SFWET',
-          'so4_a1SFWET','so4_a2SFWET','so4_a3SFWET','so4_a5SFWET','so4_c1SFWET','so4_c2SFWET','so4_c3SFWET','so4_c5SFWET',
-          'soa_a1SFWET','soa_a2SFWET','soa_a3SFWET','soa_c1SFWET','soa_c2SFWET','soa_c3SFWET',
-          'Mass_bc','Mass_dst','Mass_mom','Mass_ncl','Mass_pom','Mass_so4','Mass_soa',
+          'dst_a1DDF','dst_a3DDF','dst_c1DDF','dst_c3DDF','dst_a1SFWET','dst_a3SFWET','dst_c1SFWET','dst_c3SFWET',
           'O3','LHFLX',
           'O3_2DTDA_trop','O3_2DTDB_trop','O3_2DTDD_trop','O3_2DTDE_trop','O3_2DTDI_trop','O3_2DTDL_trop',
           'O3_2DTDN_trop','O3_2DTDO_trop','O3_2DTDS_trop','O3_2DTDU_trop','O3_2DTRE_trop','O3_2DTRI_trop',
@@ -332,7 +183,7 @@ cat << EOF >> user_nl_eam
           'Mass_dst_200','Mass_mom_200','Mass_ncl_200','Mass_pom_200','Mass_so4_200','Mass_soa_200',
           'O3_2DTDD','O3_2DCIP','O3_2DCIL','CO_2DTDS','CO_2DTDD','CO_2DCEP','CO_2DCEL','NO_2DTDD',
           'FLNTC','SAODVIS',
-          'H2OLNZ','CH4LNZ','N2OLNZ','NOYLNZ',
+          'H2OLNZ',
           'dst_a1SF','dst_a3SF',
           'PHIS','CLOUD','TGCLDIWP','TGCLDCWP','AREL',
           'CLDTOT_ISCCP','MEANCLDALB_ISCCP','MEANPTOP_ISCCP','CLD_CAL',
@@ -342,40 +193,25 @@ cat << EOF >> user_nl_eam
           'CLDLOW_CAL_LIQ','CLDLOW_CAL_ICE','CLDLOW_CAL_UN',
           'CLWMODIS','CLIMODIS'
 
- fincl2 = 'PS', 'FLUT','FSNT','FLNT','PRECT','U200','V200','U850','V850','Z500','OMEGA500',
-          'TCO','SCO','TREFHTMN:M','TREFHTMX:X','TREFHT','QREFHT','TMQ'
+ fincl2 = 'PS', 'FLUT','PRECT','U200','V200','U850','V850',
+          'TCO','SCO','TREFHTMN','TREFHTMX','TREFHT','QREFHT'
  fincl3 = 'PS', 'PSL','PRECT','TUQ','TVQ','UBOT','VBOT','TREFHT','FLUT','OMEGA500','TBOT','U850','V850','U200','V200','T200','T500','Z700'
  fincl4 = 'PRECT'
  fincl5 = 'O3_SRF'
  fincl6 = 'CO_2DMSD','NO2_2DMSD','NO_2DMSD','O3_2DMSD','O3_2DMSD_trop'
- fincl7 = 'PS','Q','T','Z3','CLOUD','CONCLD','CLDICE','CLDLIQ','FREQR','REI','REL','PRECT','TMQ','PRECC','TREFHT','QREFHT','OMEGA','CLDTOT','LHFLX','SHFLX','FLDS','FSDS','FLNS','FSNS','FLNSC','FSDSC','FSNSC','AODVIS','AODABS','LS_FLXPRC','LS_FLXSNW','LS_REFFRAIN','ZMFLXPRC','ZMFLXSNW','CCN1','CCN2','CCN3','CCN4','CCN5','num_a1','num_a2','num_a3','num_a4','so4_a1','so4_a2','so4_a3','AREL','TGCLDLWP','AQRAIN','ANRAIN','FREQR','PRECL','RELHUM'
- fincl7lonlat='262.5e_36.6n','203.4e_71.3n','147.4e_2.0s','166.9e_0.5s','130.9e_12.4s','331.97e_39.09n'
 
  ! -- chemUCI settings ------------------
- history_chemdyg_summary = .false.
- history_gaschmbudget_2D = .true.
- history_gaschmbudget_2D_levels = .true.
- history_UCIgaschmbudget_2D = .true.
- history_UCIgaschmbudget_2D_levels = .true.
+ history_chemdyg_summary = .true.
+ history_gaschmbudget_2D = .false.
+ history_gaschmbudget_2D_levels = .false.
  history_gaschmbudget_num = 6 !! no impact if  history_gaschmbudget_2D = .false.
 
  ! -- MAM5 settings ------------------    
  is_output_interactive_volc = .true.        
 
- history_aero_optics    = .true.
- history_aerosol        = .true.
- history_amwg           = .true.
- history_budget         = .true.
- history_verbose        = .true.
-
 EOF
 
 cat << EOF >> user_nl_elm
-
- ! default landuse.timeseries file below probably was created using CMIP5 raw land data. Use the updated one.
- ! flanduse_timeseries = '\${DIN_LOC_ROOT}/lnd/clm2/surfdata_map/landuse.timeseries_0.5x0.5_hist_simyr1850-2015_c191004.nc'
- flanduse_timeseries = '\${DIN_LOC_ROOT}/lnd/clm2/surfdata_map/landuse.timeseries_0.5x0.5_hist_simyr1850-2015_c240308.nc'
-
  hist_dov2xy = .true.,.true.
  hist_fexcl1 = 'AGWDNPP','ALTMAX_LASTYEAR','AVAIL_RETRANSP','AVAILC','BAF_CROP',
                'BAF_PEATF','BIOCHEM_PMIN_TO_PLANT','CH4_SURF_AERE_SAT','CH4_SURF_AERE_UNSAT','CH4_SURF_DIFF_SAT',
@@ -419,14 +255,6 @@ cat << EOF >> user_nl_elm
 
 EOF
 
-# 
-cat << EOF >> user_nl_mosart
- rtmhist_fincl2 = 'RIVER_DISCHARGE_OVER_LAND_LIQ'
- rtmhist_mfilt = 1,365
- rtmhist_ndens = 2
- rtmhist_nhtfrq = 0,-24
-EOF
-
 }
 
 # =====================================
@@ -452,10 +280,10 @@ then
     # Number of cores per node (machine specific)
     if [ "${MACHINE}" == "chrysalis" ]; then
         ncore=64
-        hthrd=1  # hyper-threading, default to non-threading
-    elif [ "${MACHINE}" == "pm-cpu" ]; then
-        ncore=128
-        hthrd=1  # including pm-cpu
+        hthrd=2  # hyper-threading
+    else
+        echo 'ERROR: MACHINE = '${MACHINE}' is not supported for current custom PE layout setting.'
+        exit 400
     fi
 
     # Extract number of nodes
@@ -471,65 +299,36 @@ then
     ./xmlchange MAX_TASKS_PER_NODE=$(( $ncore * $hthrd))
 
     # Layout-specific customization
-    if [ "${nnodes}" == "1" ]; then
+    if [ "${nnodes}" == "104" ]; then
 
-       echo Using custom 1 nodes layout with pm-cpu
+       echo Using custom 104 nodes layout
 
-      ./xmlchange CPL_NTASKS=128
-      ./xmlchange ATM_NTASKS=128
-      ./xmlchange OCN_NTASKS=128
-      ./xmlchange OCN_ROOTPE=0
+       ### Current defaults for L
+      ./xmlchange CPL_NTASKS=5440
+      ./xmlchange ATM_NTASKS=5440
+      ./xmlchange OCN_NTASKS=1216
+      ./xmlchange OCN_ROOTPE=5440
 
-      ./xmlchange LND_NTASKS=128
-      ./xmlchange ROF_NTASKS=128
-      ./xmlchange ICE_NTASKS=128
-      ./xmlchange LND_ROOTPE=0
-      ./xmlchange ROF_ROOTPE=0
+      ./xmlchange LND_NTASKS=1088
+      ./xmlchange ROF_NTASKS=1088
+      ./xmlchange ICE_NTASKS=4352
+      ./xmlchange LND_ROOTPE=4352
+      ./xmlchange ROF_ROOTPE=4352
 
-    elif [ "${nnodes}" == "2" ]; then
+    elif [ "${nnodes}" == "52" ]; then
 
-       echo Using custom 2 nodes layout with pm-cpu
+       echo Using custom 52 nodes layout
 
-      ./xmlchange CPL_NTASKS=256
-      ./xmlchange ATM_NTASKS=256
-      ./xmlchange OCN_NTASKS=256
-      ./xmlchange OCN_ROOTPE=0
+      ./xmlchange CPL_NTASKS=2720
+      ./xmlchange ATM_NTASKS=2720
+      ./xmlchange OCN_NTASKS=608
+      ./xmlchange OCN_ROOTPE=2720
 
-      ./xmlchange LND_NTASKS=256
-      ./xmlchange ROF_NTASKS=256
-      ./xmlchange ICE_NTASKS=256
-      ./xmlchange LND_ROOTPE=0
-      ./xmlchange ROF_ROOTPE=0
-
-    elif [ "${nnodes}" == "4" ]; then
-
-       echo Using custom 4 nodes layout with pm-cpu
-
-      ./xmlchange CPL_NTASKS=512
-      ./xmlchange ATM_NTASKS=512
-      ./xmlchange OCN_NTASKS=512
-      ./xmlchange OCN_ROOTPE=0
-
-      ./xmlchange LND_NTASKS=512
-      ./xmlchange ROF_NTASKS=512
-      ./xmlchange ICE_NTASKS=512
-      ./xmlchange LND_ROOTPE=0
-      ./xmlchange ROF_ROOTPE=0
-
-    elif [ "${nnodes}" == "8" ]; then
-
-       echo Using custom 8 nodes layout with pm-cpu
-
-      ./xmlchange CPL_NTASKS=1024
-      ./xmlchange ATM_NTASKS=1024
-      ./xmlchange OCN_NTASKS=1024
-      ./xmlchange OCN_ROOTPE=0
-
-      ./xmlchange LND_NTASKS=1024
-      ./xmlchange ROF_NTASKS=1024
-      ./xmlchange ICE_NTASKS=1024
-      ./xmlchange LND_ROOTPE=0
-      ./xmlchange ROF_ROOTPE=0
+      ./xmlchange LND_NTASKS=544
+      ./xmlchange ROF_NTASKS=544
+      ./xmlchange ICE_NTASKS=2176
+      ./xmlchange LND_ROOTPE=2176
+      ./xmlchange ROF_ROOTPE=2176
 
     else
 
@@ -629,12 +428,8 @@ create_newcase() {
     if [ ! -z "${QUEUE}" ]; then
       args="${args} --queue ${QUEUE}"
     fi
-</pre> 
-<a name="createNewcase"></a><br>
-<p class="hitext2">
-&nbsp;&nbsp;&nbsp;    ${CODE_ROOT}/cime/scripts/create_newcase ${args}
-<a href="#runCtrl" style="color: black">&#9166;</a>
-</p><pre>
+
+    ${CODE_ROOT}/cime/scripts/create_newcase ${args}
 
     if [ $? != 0 ]; then
       echo $'\nNote: if create_newcase failed because sub-directory already exists:'
@@ -677,15 +472,9 @@ case_setup() {
 
     # Custom user_nl
     user_nl
-</pre> 
-<a name="caseSetup"></a><br>
-<pre>
+
     # Finally, run CIME case.setup
-</pre>
-<p class="hitext2">
-&nbsp;&nbsp;&nbsp;    ./case.setup --reset
-<a href="#runCtrl" style="color: black">&#9166;</a>
-</p><pre>
+    ./case.setup --reset
 
     popd
 }
@@ -730,15 +519,9 @@ case_build() {
         if [ "${DEBUG_COMPILE^^}" == "TRUE" ]; then
             ./xmlchange DEBUG=${DEBUG_COMPILE^^}
         fi
-</pre> 
-<a name="caseBuild"></a><br>
-<pre>
+
         # Run CIME case.build
-</pre>
-<p class="hitext2">
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;        ./case.build
-<a href="#runCtrl" style="color: black">&#9166;</a>
-</p><pre>
+        ./case.build
 
     fi
 
@@ -758,22 +541,28 @@ runtime_options() {
 
     # Set simulation start date
     ./xmlchange RUN_STARTDATE=${START_DATE}
+    echo sim start date
 
     # Segment length
     ./xmlchange STOP_OPTION=${STOP_OPTION,,},STOP_N=${STOP_N}
+    echo length
 
     # Restart frequency
     ./xmlchange REST_OPTION=${REST_OPTION,,},REST_N=${REST_N}
+    echo frequency
 
     # Coupler history
     ./xmlchange HIST_OPTION=${HIST_OPTION,,},HIST_N=${HIST_N}
+    echo history
 
     # Coupler budgets (always on)
     ./xmlchange BUDGETS=TRUE
+    echo budgets
 
     # Set resubmissions
     if (( RESUBMIT > 0 )); then
         ./xmlchange RESUBMIT=${RESUBMIT}
+	echo resubmit
     fi
 
     # Run type
@@ -781,6 +570,7 @@ runtime_options() {
     if [ "${MODEL_START_TYPE,,}" == "initial" ]; then
         ./xmlchange RUN_TYPE="startup"
         ./xmlchange CONTINUE_RUN="FALSE"
+	echo run type
 
     # Continue existing run
     elif [ "${MODEL_START_TYPE,,}" == "continue" ]; then
@@ -819,16 +609,8 @@ case_submit() {
     echo $'\n----- Starting case_submit -----\n'
     pushd ${CASE_SCRIPTS_DIR}
     
-</pre> 
-<a name="caseSubmit"></a><br>
-<pre>
-    # Run CIME case.submit. Add --a="reservation=xxxx" only when using a reservation.
-    # Change below to just ./case.submit for regular use of this script
-</pre>
-<p class="hitext2">
-   &nbsp;&nbsp;&nbsp; ./case.submit -a="--reservation=e3sm_day1"
-<a href="#runCtrl" style="color: black">&#9166;</a>
-</p><pre>
+    # Run CIME case.submit
+    ./case.submit
 
     popd
 }
@@ -858,63 +640,3 @@ popd() {
 # Now, actually run the script
 #-----------------------------------------------------
 main
-
-</pre>
-<a href="#runCtrl" style="color: black">&#9166;</a>
-<p class='hitextb'>
-<a name="RunOneYear"></a>
-<p class='hitextb'>
-Customize for a  production one-year coupled simulation using 8 nodes <br><br>
-Check the status of previous 1-day run
-</p>
-<p class='hitext0'>
-<input type='hidden' id="EnterTestDir0" value="cd $PSCRATCH/E3SMv3/Tutorials/v3.LR.historical_0101_b2000.pm-cpu">
-cd $PSCRATCH/E3SMv3/Tutorials/v3.LR.historical_0101_b2000.pm-cpu 
-<img src="../images/copy-icon.png" width=20 alt='copy' onclick="copyCMD('EnterTestDir0');">
-<br><br>
-ls -l build/e3sm.exe
-</p>
-<p class='hitext'>
-cd ~/E3SM_scripts <br>
-</p>
-<p class='hitext0'>
-cp -p run.v3.LR.historical_0101_b2000.pm-cpu.sh run.v3.LR.historical_0101_b2000.1-year.pm-cpu.sh <br>
-</p>
-<p class='hitext'>
-open this file to edit: run.v3.LR.historical_0101_b2000.1-year.pm-cpu.sh <br>
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="#casePElayout" style="color: black">Reset run type/pe-layout &#9166;</a>
-<ul>
-<li>comment out the line (L58) <div class="hitexta">readonly run='custom-2_1x1_ndays'
-<li>uncomment the line (L67) <div class="hitexta">#readonly run='production'
-<li>change the following from true to false if you previously ran a successful 1-day run (L115)
-<div class="hitexta">do_case_build=true</div>
-</ul>
-</P><p class='hitextb'>
-Alternative: copy over a pre-modified script<br>
-<input type='hidden' id="runHist1yScript" value="cp -p /global/cfs/cdirs/e3sm/www/Tutorials/2024/scripts/run.v3.LR.historical_0101_b2000.1-year.pm-cpu.sh ~/E3SM_scripts/.">
-</p>
-<p class="hitext0">
-<ul>
-<li>cp -p /global/cfs/cdirs/e3sm/www/Tutorials/2024/scripts/run.v3.LR.historical_0101_b2000.1-year.pm-cpu.sh ~/E3SM_scripts/. 
-<img src="../images/copy-icon.png" width=20 alt='copy' onclick="copyCMD('runHist1yScript');">
-</ul>
-<br><br>
-<input type='hidden' id="run1yCMD" value="./run.v3.LR.historical_0101_b2000.1-year.pm-cpu.sh">
-./run.v3.LR.historical_0101_b2000.1-year.pm-cpu.sh
-<img src="../images/copy-icon.png" width=20 alt='copy' onclick="copyCMD('run1yCMD');">
-</p>
-<p class="hitext0">
-<input type='hidden' id="EnterTestDir2" value="cd $PSCRATCH/E3SMv3/Tutorials/v3.LR.historical_0101_b2000.pm-cpu">
-cd $PSCRATCH/E3SMv3/Tutorials/v3.LR.historical_0101_b2000.pm-cpu
-<img src="../images/copy-icon.png" width=20 alt='copy' onclick="copyCMD('EnterTestDir2');">
-</p>
-</ul></ul>
-<script>
-function copyCMD(fieldId) {
-  var copyText = document.getElementById(fieldId);
-  // Copy the text associated with the fieldId
-  navigator.clipboard.writeText(copyText.value);
-}
-</script>
-</body>
-</html>

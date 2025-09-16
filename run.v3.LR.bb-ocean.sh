@@ -19,7 +19,7 @@ readonly PROJECT="e3sm"
 # Simulation
 readonly COMPSET="WCYCL1850"
 readonly RESOLUTION="ne30pg2_r05_IcoswISC30E3r5"
-readonly CASE_NAME="v3.LR.bb-ocean.test65"
+readonly CASE_NAME="v3.LR.bb-ocean.test67"
 # If this is part of a simulation campaign, ask your group lead about using a case_group label
 # otherwise, comment out
 #readonly CASE_GROUP="v3.LR"

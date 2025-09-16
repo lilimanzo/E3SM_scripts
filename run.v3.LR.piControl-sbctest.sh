@@ -19,7 +19,7 @@ readonly PROJECT="e3sm"
 # Simulation
 readonly COMPSET="WCYCL1850"
 readonly RESOLUTION="ne30pg2_r05_IcoswISC30E3r5"
-readonly CASE_NAME="v3.LR.sbc.test1012"
+readonly CASE_NAME="v3.LR.sbc.test1028"
 # If this is part of a simulation campaign, ask your group lead about using a case_group label
 # otherwise, comment out
 #readonly CASE_GROUP="v3.LR"
@@ -41,7 +41,7 @@ readonly RUN_REFCASE="20231209.v3.LR.piControl-spinup.chrysalis"
 readonly RUN_REFDATE="2001-01-01"
 
 # Set paths
-readonly CODE_ROOT="/${HOME}/E3SM.master"
+readonly CODE_ROOT="/${HOME}/E3SM.master2"
 readonly CASE_ROOT="/pscratch/sd/l/${USER}/sbc/${CASE_NAME}"
 
 # Sub-directories
@@ -53,9 +53,9 @@ readonly CASE_ARCHIVE_DIR=${CASE_ROOT}/archive
 #  or 'production' for full simulation
 
 #readonly run='L_1x10_ndays'  # build with this to ensure non-threading
-#readonly run='S_1x10_ndays'
+readonly run='S_1x1_ndays'
 #readonly run='S_2x5_ndays'
-readonly run='M_1x1_nmonths'
+#readonly run='M_1x1_nmonths'
 
 #readonly run='production'
 
